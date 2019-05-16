@@ -1,0 +1,18 @@
+[Desktop Entry]
+Comment=Plasma theme with colors inspired from Windows 10
+Name=Redmond
+X-KDE-PluginInfo-Author=Marco Martin
+X-KDE-PluginInfo-Category=Plasma Theme
+X-KDE-PluginInfo-Email=mart@kde.org
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=Redmond
+X-KDE-PluginInfo-Version=0.22.8
+X-KDE-PluginInfo-Website=
+X-Plasma-API=5.0
+
+[ContrastEffect]
+enabled=true
+contrast=0.2
+intensity=0.4
+saturation=1.7
