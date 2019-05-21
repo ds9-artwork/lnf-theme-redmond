@@ -38,6 +38,7 @@ Item {
         placeholderText: i18n("Search...")
         onTextChanged: timer.restart()
         leftPadding: expandButton.width + units.smallSpacing
+        rightPadding: clearButton.width + units.smallSpacing
         onActiveFocusChanged: {
             if (activeFocus) {
                 plasmoid.status = PlasmaCore.Types.AcceptingInputStatus
@@ -64,6 +65,19 @@ Item {
             }
             onClicked: plasmoid.expanded = !plasmoid.expanded
         }
+        PlasmaComponents.ToolButton {
+            id: clearButton
+            icon.name: "edit-clear"
+            width: Math.min(parent.height - units.smallSpacing * 2, units.iconSizes.large)
+            height: width
+            visible: searchField.text.length > 0
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+                rightMargin: units.smallSpacing
+            }
+            onClicked: searchField.text = ""
+        }
     }
 
     Plasmoid.fullRepresentation: Controls.ScrollView {
@@ -82,6 +96,7 @@ Item {
             onActivated: {
                 plasmoid.hidePopup()
             }
+            Keys.forwardTo: plasmoid.compactRepresentationItem
         }
     }
 }
