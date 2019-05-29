@@ -116,6 +116,7 @@ Item {
             Controls.Label {
                 anchors.centerIn: parent
                 visible: resultsView.count == 0
+                color: theme.textColor
                 text: i18n("No results found")
             }
 
