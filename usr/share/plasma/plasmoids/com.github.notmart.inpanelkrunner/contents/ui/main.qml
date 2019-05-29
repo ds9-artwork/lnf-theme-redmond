@@ -39,10 +39,9 @@ Item {
         onTextChanged: timer.restart()
         leftPadding: expandButton.width + units.smallSpacing
         rightPadding: clearButton.width + units.smallSpacing
+        onPressed: plasmoid.status = PlasmaCore.Types.AcceptingInputStatus
         onActiveFocusChanged: {
-            if (activeFocus) {
-                plasmoid.status = PlasmaCore.Types.AcceptingInputStatus
-            } else {
+            if (!activeFocus) {
                 plasmoid.status = PlasmaCore.Types.ActiveStatus
             }
         }
@@ -50,7 +49,10 @@ Item {
             id: timer
             interval: 500
             repeat: false
-            onTriggered: plasmoid.fullRepresentationItem.resultsView.setQueryString(searchField.text);
+            onTriggered: {
+                plasmoid.fullRepresentationItem.resultsView.setQueryString(searchField.text);
+                plasmoid.expanded = searchField.text.length > 0
+            }
         }
         PlasmaComponents.ToolButton {
             id: expandButton
@@ -78,19 +80,43 @@ Item {
             }
             onClicked: searchField.text = ""
         }
+        cursorDelegate: 
+                
+            Rectangle {
+                id: fakeCursor
+                width: searchField.cursorRectangle.width
+                height: searchField.cursorRectangle.height
+                x: searchField.cursorRectangle.x
+                y: searchField.cursorRectangle.y
+                visible: searchField.activeFocus || plasmoid.expanded
+                color: theme.viewTextColor
+                opacity: 1
+
+                Timer {
+                    running: fakeCursor.visible
+                    interval: 700
+                    repeat: true
+                    onTriggered: {
+                        fakeCursor.opacity = 1 - fakeCursor.opacity;
+                    }
+                }
+            }
+        
     }
 
     Plasmoid.fullRepresentation: Controls.ScrollView {
         Layout.minimumWidth: units.gridUnit * 25
-        Layout.minimumHeight: Math.min(resultsView.contentHeight, units.gridUnit * 30)
+        Layout.minimumHeight: Math.max(units.gridUnit * 2, Math.min(resultsView.contentHeight, units.gridUnit * 30))
         Layout.maximumHeight: Math.min(resultsView.contentHeight, units.gridUnit * 30)
         property Milou.ResultsView resultsView: resultsView
 
-        Milou.ResultsView {
+        contentItem: Milou.ResultsView {
             id: resultsView
 
-            onCountChanged: {
-                plasmoid.expanded = count > 0
+            Controls.Label {
+                anchors.centerIn: parent
+                visible: resultsView.count == 0
+                text: i18n("No results found")
             }
 
             onActivated: {
@@ -98,5 +124,6 @@ Item {
             }
             Keys.forwardTo: plasmoid.compactRepresentationItem
         }
+        
     }
 }
