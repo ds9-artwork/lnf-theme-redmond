@@ -54,6 +54,11 @@ Item {
                 plasmoid.expanded = searchField.text.length > 0
             }
         }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.IBeamCursor
+            onPressed: mouse.accepted = false
+        }
         PlasmaComponents.ToolButton {
             id: expandButton
             icon.name: "search"
